@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brian Boler - Portfolio</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/feather-icons"></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXXXXX');
+    </script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-content">
+            <a href="/" class="nav-logo">
+                <i data-feather="code"></i>
+                <span>Brian Boler</span>
+            </a>
+            <div class="nav-links">
+                <a href="/projects">Projects</a>
+                <a href="/experience">Experience</a>
+                <a href="/skills">Skills</a>
+                <a href="/resume">Resume</a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        
+<div class="welcome-section">
+    <h1>Featured Projects</h1>
+    <p class="subtitle">Showcase of my technical work</p>
+</div>
+
+<div class="project-showcase">
+    <div class="project-carousel">
+        
+    </div>
+    <button class="carousel-prev"><i data-feather="chevron-left"></i></button>
+    <button class="carousel-next"><i data-feather="chevron-right"></i></button>
+</div>
+
+<div class="project-filters">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="ml">Machine Learning</button>
+    <button class="filter-btn" data-filter="web">Web Development</button>
+    <button class="filter-btn" data-filter="data">Data Science</button>
+</div>
+
+<div class="project-grid">
+    
+    <div class="card project-card" data-category="">
+        <div class="project-image">
+            <img src="/static/images/ml_pipeline.jpg" alt="Machine Learning Pipeline">
+        </div>
+        <div class="project-content">
+            <h3>Machine Learning Pipeline</h3>
+            <p>Automated ML pipeline for data processing and model training</p>
+            <div class="project-tech">
+                
+                <span class="tech-tag">Python</span>
+                
+                <span class="tech-tag">TensorFlow</span>
+                
+                <span class="tech-tag">Docker</span>
+                
+            </div>
+            <div class="project-links">
+                <a href="https://github.com/brianboler/ml-pipeline" target="_blank" class="btn btn-sm">
+                    <i data-feather="github"></i> View Code
+                </a>
+                
+            </div>
+        </div>
+    </div>
+    
+    <div class="card project-card" data-category="">
+        <div class="project-image">
+            <img src="/static/images/data_viz.jpg" alt="Data Visualization Dashboard">
+        </div>
+        <div class="project-content">
+            <h3>Data Visualization Dashboard</h3>
+            <p>Interactive dashboard for complex data analysis</p>
+            <div class="project-tech">
+                
+                <span class="tech-tag">React</span>
+                
+                <span class="tech-tag">D3.js</span>
+                
+                <span class="tech-tag">Node.js</span>
+                
+            </div>
+            <div class="project-links">
+                <a href="https://github.com/brianboler/data-viz" target="_blank" class="btn btn-sm">
+                    <i data-feather="github"></i> View Code
+                </a>
+                
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+<div id="projectModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <div id="modalContent"></div>
+    </div>
+</div>
+
+    </main>
+
+    <script>
+        feather.replace();
+    </script>
+    
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.7.1/dist/gsap.min.js"></script>
+<script>
+// Project filtering
+const filterBtns = document.querySelectorAll('.filter-btn');
+const projectCards = document.querySelectorAll('.project-card');
+
+filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        const filter = btn.dataset.filter;
+        
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        projectCards.forEach(card => {
+            if (filter === 'all' || card.dataset.category === filter) {
+                gsap.to(card, {
+                    scale: 1,
+                    opacity: 1,
+                    duration: 0.3,
+                    display: 'block'
+                });
+            } else {
+                gsap.to(card, {
+                    scale: 0.8,
+                    opacity: 0,
+                    duration: 0.3,
+                    display: 'none'
+                });
+            }
+        });
+    });
+});
+
+// Carousel functionality
+const carousel = document.querySelector('.project-carousel');
+const prevBtn = document.querySelector('.carousel-prev');
+const nextBtn = document.querySelector('.carousel-next');
+let currentSlide = 0;
+
+function updateCarousel() {
+    const slides = document.querySelectorAll('.carousel-item');
+    slides.forEach((slide, index) => {
+        if (index === currentSlide) {
+            gsap.to(slide, {
+                opacity: 1,
+                x: 0,
+                duration: 0.5
+            });
+        } else {
+            gsap.to(slide, {
+                opacity: 0,
+                x: index > currentSlide ? '100%' : '-100%',
+                duration: 0.5
+            });
+        }
+    });
+}
+
+prevBtn.addEventListener('click', () => {
+    const slides = document.querySelectorAll('.carousel-item');
+    currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+    updateCarousel();
+});
+
+nextBtn.addEventListener('click', () => {
+    const slides = document.querySelectorAll('.carousel-item');
+    currentSlide = (currentSlide + 1) % slides.length;
+    updateCarousel();
+});
+
+// Modal functionality
+const modal = document.getElementById('projectModal');
+const modalContent = document.getElementById('modalContent');
+const closeBtn = document.querySelector('.close');
+
+projectCards.forEach(card => {
+    card.addEventListener('click', () => {
+        modalContent.innerHTML = card.innerHTML;
+        modal.style.display = 'block';
+        gsap.from(modalContent, {
+            y: -50,
+            opacity: 0,
+            duration: 0.3
+        });
+    });
+});
+
+closeBtn.addEventListener('click', () => {
+    gsap.to(modal, {
+        opacity: 0,
+        duration: 0.3,
+        onComplete: () => {
+            modal.style.display = 'none';
+            modal.style.opacity = 1;
+        }
+    });
+});
+
+// Analytics
+if (typeof gtag !== 'undefined') {
+    document.querySelectorAll('.project-links a').forEach(link => {
+        link.addEventListener('click', (e) => {
+            gtag('event', 'click', {
+                'event_category': 'Project',
+                'event_label': link.href
+            });
+        });
+    });
+}
+</script>
+
+
+    <button id="darkModeToggle" class="theme-toggle">
+        <i data-feather="moon"></i>
+    </button>
+
+    <script>
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const icon = darkModeToggle.querySelector('i');
+
+    darkModeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        icon.setAttribute('data-feather', 
+            document.body.classList.contains('dark-mode') ? 'sun' : 'moon'
+        );
+        feather.replace();
+    });
+    </script>
+</body>
+</html> 
